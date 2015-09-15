@@ -1,7 +1,5 @@
 package jskills;
 
-import lombok.Getter;
-
 /**
  * Represents a player who has a {@link Rating}.
  */
@@ -14,45 +12,20 @@ public class Player<T> implements IPlayer, ISupportPartialPlay, ISupportPartialU
     private static final double DefaultPartialUpdatePercentage = 1.0;
 
     /** The identifier for the player, such as a name. **/
-    @Getter private final T id;
+    private final T id;
 
     /**
      * Indicates the percent of the time the player should be weighted where 0.0
      * indicates the player didn't play and 1.0 indicates the player played 100%
      * of the time.
      */
-    @Getter private final double partialPlayPercentage;
+    private final double partialPlayPercentage;
 
     /**
      * Indicated how much of a skill update a player should receive where 0.0
      * represents no update and 1.0 represents 100% of the update.
      */
-    @Getter private final double partialUpdatePercentage;
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Player<?> other = (Player<?>) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
-    } 
+    private final double partialUpdatePercentage;
 
     /**
      * Constructs a player.
@@ -102,9 +75,46 @@ public class Player<T> implements IPlayer, ISupportPartialPlay, ISupportPartialU
         this.partialUpdatePercentage = partialUpdatePercentage;
     }
 
+    public T getId() {
+        return id;
+    }
+
+    @Override
+    public double getPartialPlayPercentage() {
+        return partialPlayPercentage;
+    }
+
+    @Override
+    public double getPartialUpdatePercentage() {
+        return partialUpdatePercentage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Player<?> player = (Player<?>) o;
+
+        if (Double.compare(player.getPartialPlayPercentage(), getPartialPlayPercentage()) != 0) return false;
+        if (Double.compare(player.getPartialUpdatePercentage(), getPartialUpdatePercentage()) != 0) return false;
+        return !(getId() != null ? !getId().equals(player.getId()) : player.getId() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getId() != null ? getId().hashCode() : 0;
+        temp = Double.doubleToLongBits(getPartialPlayPercentage());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getPartialUpdatePercentage());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
     @Override public String toString() {
         return id != null ? id.toString() : super.toString();
     }
-    
-    
 }

@@ -1,11 +1,9 @@
 package jskills;
 
-import lombok.Data;
-
 /**
  * Parameters about the game for calculating the TrueSkill.
  */
-@Data public class GameInfo {
+public class GameInfo {
 
     private static final double defaultInitialMean = 25.0;
     private static final double defaultBeta = defaultInitialMean/6.0;
@@ -20,7 +18,7 @@ import lombok.Data;
     private double drawProbability;
 
     public GameInfo(double initialMean, double initialStandardDeviation,
-            double beta, double dynamicFactor, double drawProbability) {
+                    double beta, double dynamicFactor, double drawProbability) {
         this.initialMean = initialMean;
         this.initialStandardDeviation = initialStandardDeviation;
         this.beta = beta;
@@ -39,5 +37,68 @@ import lombok.Data;
     
     public Rating getDefaultRating() {
     	return new Rating(initialMean, initialStandardDeviation);
+    }
+
+    public double getInitialMean() {
+        return initialMean;
+    }
+
+    public double getInitialStandardDeviation() {
+        return initialStandardDeviation;
+    }
+
+    public double getBeta() {
+        return beta;
+    }
+
+    public double getDynamicsFactor() {
+        return dynamicsFactor;
+    }
+
+    public double getDrawProbability() {
+        return drawProbability;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GameInfo gameInfo = (GameInfo) o;
+
+        if (Double.compare(gameInfo.getInitialMean(), getInitialMean()) != 0) return false;
+        if (Double.compare(gameInfo.getInitialStandardDeviation(), getInitialStandardDeviation()) != 0) return false;
+        if (Double.compare(gameInfo.getBeta(), getBeta()) != 0) return false;
+        if (Double.compare(gameInfo.getDynamicsFactor(), getDynamicsFactor()) != 0) return false;
+        return Double.compare(gameInfo.getDrawProbability(), getDrawProbability()) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(getInitialMean());
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getInitialStandardDeviation());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getBeta());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getDynamicsFactor());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getDrawProbability());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "GameInfo{" +
+                "initialMean=" + initialMean +
+                ", initialStandardDeviation=" + initialStandardDeviation +
+                ", beta=" + beta +
+                ", dynamicsFactor=" + dynamicsFactor +
+                ", drawProbability=" + drawProbability +
+                '}';
     }
 }

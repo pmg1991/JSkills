@@ -1,7 +1,5 @@
 package jskills.numerics;
 
-import lombok.Data;
-
 /**
  * A very limited implementation of an immutable range of Integers, including
  * endpoints. There is no such thing as an empty range.
@@ -13,7 +11,7 @@ import lombok.Data;
  * C#, so I'm going to eschew the relative type safety afforded by Moser's
  * scheme and make this class final. A Range is a Range is a Range.
  */
-@Data public final class Range<T> { 
+public final class Range<T> {
     
 	private final int min;
 	private final int max;
@@ -23,6 +21,14 @@ import lombok.Data;
 
         this.min = min;
         this.max = max;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public int getMax() {
+        return max;
     }
 
     public boolean isInRange(int value) {
@@ -46,5 +52,28 @@ import lombok.Data;
 
     public static <T> Range<T> atLeast(int minimumValue) {
         return new Range<T>(minimumValue, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Range<?> range = (Range<?>) o;
+
+        return getMin() == range.getMin() && getMax() == range.getMax();
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getMin();
+        result = 31 * result + getMax();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%d, %d]", this.min, this.max);
     }
 }

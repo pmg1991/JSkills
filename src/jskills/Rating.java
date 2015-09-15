@@ -1,14 +1,13 @@
 package jskills;
 
-import static jskills.numerics.MathUtils.square;
+import jskills.numerics.GaussianDistribution;
 
 import java.util.Collection;
 
-import jskills.numerics.GaussianDistribution;
-import lombok.Data;
+import static jskills.numerics.MathUtils.square;
 
 /** Container for a player's rating. **/
-@Data public class Rating {
+public class Rating {
 
     private static final int defaultConservativeStandardDeviationMultiplier = 3;
 
@@ -49,6 +48,22 @@ import lombok.Data;
         this.conservativeRating = mean - conservativeStandardDeviationMultiplier*standardDeviation;
     }
 
+    public double getConservativeStandardDeviationMultiplier() {
+        return conservativeStandardDeviationMultiplier;
+    }
+
+    public double getMean() {
+        return mean;
+    }
+
+    public double getStandardDeviation() {
+        return standardDeviation;
+    }
+
+    public double getConservativeRating() {
+        return conservativeRating;
+    }
+
     public static Rating partialUpdate(Rating prior, Rating fullPosterior, double updatePercentage) {
         GaussianDistribution priorGaussian = new GaussianDistribution(prior),
                     posteriorGaussian = new GaussianDistribution(fullPosterior);
@@ -73,10 +88,40 @@ import lombok.Data;
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Rating rating = (Rating) o;
+
+        if (Double.compare(rating.getConservativeStandardDeviationMultiplier(), getConservativeStandardDeviationMultiplier()) != 0)
+            return false;
+        if (Double.compare(rating.getMean(), getMean()) != 0) return false;
+        if (Double.compare(rating.getStandardDeviation(), getStandardDeviation()) != 0) return false;
+        if (Double.compare(rating.getConservativeRating(), getConservativeRating()) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(getConservativeStandardDeviationMultiplier());
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getMean());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getStandardDeviation());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getConservativeRating());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
     public String toString() {
         // As a debug helper, display a localized rating:
-        return String.format("Mean(μ)=%f, Std-Dev(σ)=%f",
-                             mean, standardDeviation);
+        return String.format("Mean(μ)=%f, Std-Dev(σ)=%f", mean, standardDeviation);
     }
 
     public static double calcMeanMean(Collection<Rating> ratings) {

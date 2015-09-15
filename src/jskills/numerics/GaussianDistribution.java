@@ -9,8 +9,6 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static jskills.numerics.MathUtils.square;
 import jskills.Rating;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
 /**
  * Immutable representation of the Gaussian distribution of one variable. Not
@@ -32,7 +30,6 @@ import lombok.Getter;
  * 
  * @see http://mathworld.wolfram.com/NormalDistribution.html
  */
-@EqualsAndHashCode
 public class GaussianDistribution {
 
     /** 
@@ -41,22 +38,22 @@ public class GaussianDistribution {
     public static final GaussianDistribution UNIFORM = fromPrecisionMean(0, 0);
 
 	/** The peak of the Gaussian, μ **/
-	@Getter private final double mean;
+	private final double mean;
 	
 	/** The width of the Gaussian, σ, where the height drops to max/e **/
-	@Getter private final double standardDeviation;
+	private final double standardDeviation;
 	
 	/** The square of the standard deviation, σ^2 **/
-	@Getter private final double variance;
+	private final double variance;
 	
 	// Precision and PrecisionMean are used because they make multiplying and
 	// dividing simpler (see the accompanying math paper for more details)
 	
 	/** 1/σ^2 **/
-	@Getter private final double precision;
+	private final double precision;
 	
 	/** Precision times mean, μ/σ^2 **/
-	@Getter private final double precisionMean;
+	private final double precisionMean;
 
 	/**
 	 * The normalization constant multiplies the exponential and causes the
@@ -267,9 +264,60 @@ public class GaussianDistribution {
         return inverseCumulativeTo(x, 0, 1);
     }
 
+    public double getMean() {
+        return mean;
+    }
+
+    public double getStandardDeviation() {
+        return standardDeviation;
+    }
+
+    public double getVariance() {
+        return variance;
+    }
+
+    public double getPrecision() {
+        return precision;
+    }
+
+    public double getPrecisionMean() {
+        return precisionMean;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GaussianDistribution that = (GaussianDistribution) o;
+
+        if (Double.compare(that.mean, mean) != 0) return false;
+        if (Double.compare(that.standardDeviation, standardDeviation) != 0) return false;
+        if (Double.compare(that.variance, variance) != 0) return false;
+        if (Double.compare(that.precision, precision) != 0) return false;
+        return Double.compare(that.precisionMean, precisionMean) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(mean);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(standardDeviation);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(variance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(precision);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(precisionMean);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
     @Override
     public String toString() { // Debug help
-        return String.format("Mean(μ)=%f, Std-Dev(σ)=%f",
-                             mean, standardDeviation);
+        return String.format("Mean(μ)=%f, Std-Dev(σ)=%f", mean, standardDeviation);
     }
 }

@@ -1,10 +1,10 @@
 package jskills;
 
+import jskills.numerics.Range;
+
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
-
-import jskills.numerics.Range;
 
 /**
  * Base class for all skill calculator implementations.
@@ -39,7 +39,7 @@ public abstract class SkillCalculator {
      * @param teamRanks
      *            The ranks of the teams where 1 is first place. For a tie,
      *            repeat the number (e.g. 1, 2, 2)
-     * @returns All the players and their new ratings.
+     * @return All the players and their new ratings.
      */
     public abstract Map<IPlayer, Rating> calculateNewRatings(GameInfo gameInfo,
             Collection<ITeam> teams, int... teamRanks);
@@ -51,7 +51,7 @@ public abstract class SkillCalculator {
      *            Parameters for the game.
      * @param teams
      *            A mapping of team players and their ratings.
-     * @returns The quality of the match between the teams as a percentage (0% =
+     * @return The quality of the match between the teams as a percentage (0% =
      *          bad, 100% = well matched).
      */
     public abstract double calculateMatchQuality(GameInfo gameInfo,

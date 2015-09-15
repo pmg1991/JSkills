@@ -1,24 +1,12 @@
 package jskills.trueskill;
 
-import static jskills.numerics.MathUtils.square;
+import jskills.*;
+import jskills.numerics.Range;
 
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
-import jskills.GameInfo;
-import jskills.Guard;
-import jskills.IPlayer;
-import jskills.ITeam;
-import jskills.PairwiseComparison;
-import jskills.RankSorter;
-import jskills.Rating;
-import jskills.SkillCalculator;
-import jskills.numerics.Range;
+import static jskills.numerics.MathUtils.square;
 
 /**
  * Calculates new ratings for only two teams where each team has 1 or more players.
@@ -33,7 +21,7 @@ public class TwoTeamTrueSkillCalculator extends SkillCalculator
         super(EnumSet.noneOf(SupportedOptions.class), Range.<ITeam>exactly(2), Range.<IPlayer>atLeast(1));
     }
 
-     @Override
+    @Override
     public Map<IPlayer, Rating> calculateNewRatings(GameInfo gameInfo,
                                                     Collection<ITeam> teams, 
                                                     int... teamRanks)

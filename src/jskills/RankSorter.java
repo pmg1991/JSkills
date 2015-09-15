@@ -23,7 +23,7 @@ public class RankSorter {
      * 
      * @param items
      *            The items to sort according to the order specified by ranks.
-     * @param ranks
+     * @param itemRanks
      *            The ranks for each item where 1 is first place.
      * @return the items sorted according to their ranks
      */
