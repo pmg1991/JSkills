@@ -19,7 +19,7 @@ public class TeamPerformancesToTeamPerformanceDifferencesLayer extends
     }
 
     @Override
-    public void BuildLayer()
+    public void buildLayer()
     {
         for (int i = 0; i < getInputVariablesGroups().size() - 1; i++)
         {

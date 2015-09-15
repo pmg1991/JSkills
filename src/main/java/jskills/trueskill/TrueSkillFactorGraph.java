@@ -1,30 +1,14 @@
 package jskills.trueskill;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import jskills.GameInfo;
 import jskills.IPlayer;
 import jskills.ITeam;
 import jskills.Rating;
-import jskills.factorgraphs.Factor;
-import jskills.factorgraphs.FactorGraph;
-import jskills.factorgraphs.FactorGraphLayerBase;
-import jskills.factorgraphs.FactorList;
-import jskills.factorgraphs.KeyedVariable;
-import jskills.factorgraphs.Schedule;
-import jskills.factorgraphs.ScheduleSequence;
+import jskills.factorgraphs.*;
 import jskills.numerics.GaussianDistribution;
-import jskills.trueskill.layers.IteratedTeamDifferencesInnerLayer;
-import jskills.trueskill.layers.PlayerPerformancesToTeamPerformancesLayer;
-import jskills.trueskill.layers.PlayerPriorValuesToSkillsLayer;
-import jskills.trueskill.layers.PlayerSkillsToPerformancesLayer;
-import jskills.trueskill.layers.TeamDifferencesComparisonLayer;
-import jskills.trueskill.layers.TeamPerformancesToTeamPerformanceDifferencesLayer;
+import jskills.trueskill.layers.*;
+
+import java.util.*;
 
 public class TrueSkillFactorGraph extends FactorGraph<TrueSkillFactorGraph>
 {
@@ -57,12 +41,12 @@ public class TrueSkillFactorGraph extends FactorGraph<TrueSkillFactorGraph>
         {
             if (lastOutput != null)
             {
-                currentLayer.SetRawInputVariablesGroups(lastOutput);
+                currentLayer.setRawInputVariablesGroups(lastOutput);
             }
 
-            currentLayer.BuildLayer();
+            currentLayer.buildLayer();
 
-            lastOutput = currentLayer.GetRawOutputVariablesGroups();
+            lastOutput = currentLayer.getRawOutputVariablesGroups();
         }
     }
 

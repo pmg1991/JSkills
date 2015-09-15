@@ -20,12 +20,12 @@ public class TeamDifferencesComparisonLayer extends
     {
         super(parentGraph);
         _TeamRanks = teamRanks;
-        GameInfo gameInfo = ParentFactorGraph.getGameInfo();
+        GameInfo gameInfo = parentFactorGraph.getGameInfo();
         _Epsilon = DrawMargin.GetDrawMarginFromDrawProbability(gameInfo.getDrawProbability(), gameInfo.getBeta());
     }
 
     @Override
-    public void BuildLayer()
+    public void buildLayer()
     {
         for (int i = 0; i < getInputVariablesGroups().size(); i++)
         {

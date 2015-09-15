@@ -34,7 +34,7 @@ public class PlayerPriorValuesToSkillsLayer extends
     }
 
     @Override
-    public void BuildLayer()
+    public void buildLayer()
     {
         for(ITeam currentTeam : _Teams)
         {

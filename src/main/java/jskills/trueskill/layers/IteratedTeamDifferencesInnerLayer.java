@@ -45,14 +45,14 @@ public class IteratedTeamDifferencesInnerLayer extends
     }
 
     @Override
-    public void BuildLayer()
+    public void buildLayer()
     {
-        _TeamPerformancesToTeamPerformanceDifferencesLayer.SetRawInputVariablesGroups(getInputVariablesGroups());
-        _TeamPerformancesToTeamPerformanceDifferencesLayer.BuildLayer();
+        _TeamPerformancesToTeamPerformanceDifferencesLayer.setRawInputVariablesGroups(getInputVariablesGroups());
+        _TeamPerformancesToTeamPerformanceDifferencesLayer.buildLayer();
 
-        _TeamDifferencesComparisonLayer.SetRawInputVariablesGroups(
-            _TeamPerformancesToTeamPerformanceDifferencesLayer.GetRawOutputVariablesGroups());
-        _TeamDifferencesComparisonLayer.BuildLayer();
+        _TeamDifferencesComparisonLayer.setRawInputVariablesGroups(
+                _TeamPerformancesToTeamPerformanceDifferencesLayer.getRawOutputVariablesGroups());
+        _TeamDifferencesComparisonLayer.buildLayer();
     }
 
     @Override

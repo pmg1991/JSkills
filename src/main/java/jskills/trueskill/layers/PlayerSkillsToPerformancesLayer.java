@@ -24,7 +24,7 @@ public class PlayerSkillsToPerformancesLayer extends
     }
 
     @Override
-    public void BuildLayer()
+    public void buildLayer()
     {
         for(List<KeyedVariable<IPlayer, GaussianDistribution>> currentTeam : getInputVariablesGroups())
         {
@@ -45,7 +45,7 @@ public class PlayerSkillsToPerformancesLayer extends
     private GaussianLikelihoodFactor CreateLikelihood(KeyedVariable<IPlayer, GaussianDistribution> playerSkill,
                                                       KeyedVariable<IPlayer, GaussianDistribution> playerPerformance)
     {
-        return new GaussianLikelihoodFactor(MathUtils.square(ParentFactorGraph.getGameInfo().getBeta()), playerPerformance, playerSkill);
+        return new GaussianLikelihoodFactor(MathUtils.square(parentFactorGraph.getGameInfo().getBeta()), playerPerformance, playerSkill);
     }
 
     private KeyedVariable<IPlayer, GaussianDistribution> CreateOutputVariable(IPlayer key)

@@ -25,7 +25,7 @@ public class PlayerPerformancesToTeamPerformancesLayer extends
     }
 
     @Override
-    public void BuildLayer()
+    public void buildLayer()
     {
         for(List<KeyedVariable<IPlayer, GaussianDistribution>> currentTeam : getInputVariablesGroups())
         {
