@@ -6,27 +6,27 @@ import java.util.Collection;
 
 import static jskills.numerics.MathUtils.square;
 
-/** Container for a player's rating. **/
+/**
+ * Container for a player's rating.
+ */
 public class Rating {
 
     private static final int defaultConservativeStandardDeviationMultiplier = 3;
 
     private final double conservativeStandardDeviationMultiplier;
 
-    /** The statistical mean value of the rating (also known as μ). **/
+    // The statistical mean value of the rating (also known as μ).
     private final double mean;
 
-    /** The standard deviation (the spread) of the rating. This is also known as σ. **/
+    // The standard deviation (the spread) of the rating. This is also known as σ.
     private final double standardDeviation;
 
-    /** The variance of the rating (standard deviation squared) **/
-    public double getVariance() { return square(getStandardDeviation()); }
-
-    /** A conservative estimate of skill based on the mean and standard deviation. **/
+    // A conservative estimate of skill based on the mean and standard deviation.
     private final double conservativeRating;
 
     /**
      * Constructs a rating.
+     *
      * @param mean The statistical mean value of the rating (also known as μ).
      * @param standardDeviation The standard deviation of the rating (also known as σ).
      */
@@ -36,17 +36,22 @@ public class Rating {
 
     /**
      * Constructs a rating.
+     *
      * @param mean The statistical mean value of the rating (also known as μ).
      * @param standardDeviation The number of standardDeviation to subtract from the mean to achieve a conservative rating.
      * @param conservativeStandardDeviationMultiplier The number of standardDeviations to subtract from the mean to achieve a conservative rating.
      */
-    public Rating(double mean, double standardDeviation, double conservativeStandardDeviationMultiplier)
-    {
+    public Rating(double mean, double standardDeviation, double conservativeStandardDeviationMultiplier) {
         this.mean = mean;
         this.standardDeviation = standardDeviation;
         this.conservativeStandardDeviationMultiplier = conservativeStandardDeviationMultiplier;
         this.conservativeRating = mean - conservativeStandardDeviationMultiplier*standardDeviation;
     }
+
+    /**
+     * The variance of the rating (standard deviation squared).
+     */
+    public double getVariance() { return square(getStandardDeviation()); }
 
     public double getConservativeStandardDeviationMultiplier() {
         return conservativeStandardDeviationMultiplier;

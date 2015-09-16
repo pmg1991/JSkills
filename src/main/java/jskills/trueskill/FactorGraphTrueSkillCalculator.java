@@ -11,10 +11,9 @@ import static jskills.numerics.MathUtils.square;
 /**
  * Calculates TrueSkill using a full factor graph.
  */
-public class FactorGraphTrueSkillCalculator extends SkillCalculator
-{
-    public FactorGraphTrueSkillCalculator()
-    {
+public class FactorGraphTrueSkillCalculator extends SkillCalculator {
+
+    public FactorGraphTrueSkillCalculator() {
         super(EnumSet.of(SupportedOptions.PartialPlay, SupportedOptions.PartialUpdate), 
                 Range.<ITeam>atLeast(2), Range.<IPlayer>atLeast(1));
     }
@@ -22,28 +21,26 @@ public class FactorGraphTrueSkillCalculator extends SkillCalculator
     @Override
     public Map<IPlayer, Rating> calculateNewRatings(GameInfo gameInfo,
                                                     Collection<ITeam> teams, 
-                                                    int... teamRanks)
-    {
+                                                    int... teamRanks) {
         Guard.argumentNotNull(gameInfo, "gameInfo");
         validateTeamCountAndPlayersCountPerTeam(teams);
 
         List<ITeam> teamsl = RankSorter.sort(teams, teamRanks);
 
         TrueSkillFactorGraph factorGraph = new TrueSkillFactorGraph(gameInfo, teamsl, teamRanks);
-        factorGraph.BuildGraph();
-        factorGraph.RunSchedule();
+        factorGraph.buildGraph();
+        factorGraph.runSchedule();
 
-        @SuppressWarnings("unused") // TODO use this somehow?
-        double probabilityOfOutcome = factorGraph.GetProbabilityOfRanking();
+        // TODO: use this somehow?
+        double probabilityOfOutcome = factorGraph.getProbabilityOfRanking();
 
-        return factorGraph.GetUpdatedRatings();
+        return factorGraph.getUpdatedRatings();
     }
 
     @Override
-    public double calculateMatchQuality(GameInfo gameInfo, Collection<ITeam> teams)
-    {
-        // We need to create the A matrix which is the player team assigments.
-        List<ITeam> teamAssignmentsList = new ArrayList<ITeam>(teams);
+    public double calculateMatchQuality(GameInfo gameInfo, Collection<ITeam> teams) {
+        // We need to create the A matrix which is the player team assignments.
+        List<ITeam> teamAssignmentsList = new ArrayList<>(teams);
         SimpleMatrix skillsMatrix = GetPlayerCovarianceMatrix(teamAssignmentsList);
         SimpleMatrix meanVector = GetPlayerMeansVector(teamAssignmentsList);
         SimpleMatrix meanVectorTranspose = meanVector.transpose();
@@ -69,14 +66,10 @@ public class FactorGraphTrueSkillCalculator extends SkillCalculator
         double sqrtPartDenominator = middle.determinant();
         double sqrtPart = sqrtPartNumerator / sqrtPartDenominator;
 
-        double result = Math.exp(expPart) * Math.sqrt(sqrtPart);
-
-        return result;
+        return Math.exp(expPart) * Math.sqrt(sqrtPart);
     }
 
-    private static SimpleMatrix GetPlayerMeansVector(
-        Collection<ITeam> teamAssignmentsList)
-    {
+    private static SimpleMatrix GetPlayerMeansVector(Collection<ITeam> teamAssignmentsList) {
         // A simple list of all the player means.
         List<Double> temp = GetPlayerMeanRatingValues(teamAssignmentsList);
         double[] tempa = new double[temp.size()];
@@ -84,22 +77,23 @@ public class FactorGraphTrueSkillCalculator extends SkillCalculator
         return new SimpleMatrix(new double[][] {tempa}).transpose();
     }
 
-    /** This is a square matrix whose diagonal values represent the variance (square of standard deviation) of all
-     players. **/
-    private static SimpleMatrix GetPlayerCovarianceMatrix(
-        Collection<ITeam> teamAssignmentsList)
-    {
+    /**
+     * This is a square matrix whose diagonal values represent the variance (square of standard deviation) of all players.
+     */
+    private static SimpleMatrix GetPlayerCovarianceMatrix(Collection<ITeam> teamAssignmentsList) {
         List<Double> temp = GetPlayerVarianceRatingValues(teamAssignmentsList);
         double[] tempa = new double[temp.size()];
         for (int i = 0; i < tempa.length; i++) tempa[i] = temp.get(i);
         return SimpleMatrix.diag(tempa).transpose();
     }
 
-    /** TODO Make array?
-     * Helper function that gets a list of values for all player ratings **/
-    private static List<Double> GetPlayerMeanRatingValues(
-            Collection<ITeam> teamAssignmentsList) {
-        List<Double> playerRatingValues = new ArrayList<Double>();
+    /**
+     * Helper function that gets a list of values for all player ratings
+     *
+     * TODO: Make array?
+     */
+    private static List<Double> GetPlayerMeanRatingValues(Collection<ITeam> teamAssignmentsList) {
+        List<Double> playerRatingValues = new ArrayList<>();
         for (ITeam currentTeam : teamAssignmentsList)
             for (Rating currentRating : currentTeam.values())
                 playerRatingValues.add(currentRating.getMean());
@@ -107,11 +101,13 @@ public class FactorGraphTrueSkillCalculator extends SkillCalculator
         return playerRatingValues;
     }
 
-    /** TODO Make array?
-     *  Helper function that gets a list of values for all player ratings **/
-    private static List<Double> GetPlayerVarianceRatingValues(
-            Collection<ITeam> teamAssignmentsList) {
-        List<Double> playerRatingValues = new ArrayList<Double>();
+    /**
+     * Helper function that gets a list of values for all player ratings
+     *
+     * TODO Make array?
+     */
+    private static List<Double> GetPlayerVarianceRatingValues(Collection<ITeam> teamAssignmentsList) {
+        List<Double> playerRatingValues = new ArrayList<>();
         for (ITeam currentTeam : teamAssignmentsList)
             for (Rating currentRating : currentTeam.values())
                 playerRatingValues.add(currentRating.getVariance());
@@ -141,15 +137,12 @@ public class FactorGraphTrueSkillCalculator extends SkillCalculator
      * |  0.00 -1.00 |
      * </pre>
      */
-    private static SimpleMatrix CreatePlayerTeamAssignmentMatrix(
-        List<ITeam> teamAssignmentsList, int totalPlayers)
-    {
+    private static SimpleMatrix CreatePlayerTeamAssignmentMatrix(List<ITeam> teamAssignmentsList, int totalPlayers) {
 
         List<List<Double>> playerAssignments = new ArrayList<List<Double>>();
         int totalPreviousPlayers = 0;
 
-        for (int i = 0; i < teamAssignmentsList.size() - 1; i++)
-        {
+        for (int i = 0; i < teamAssignmentsList.size() - 1; i++) {
             ITeam currentTeam = teamAssignmentsList.get(i);
 
             // Need to add in 0's for all the previous players, since they're not
@@ -158,16 +151,14 @@ public class FactorGraphTrueSkillCalculator extends SkillCalculator
             for(int j = 0; j < totalPreviousPlayers; j++) currentRowValues.add(0.);
             playerAssignments.add(currentRowValues);
 
-            for(IPlayer player: currentTeam.keySet())
-            {
+            for(IPlayer player: currentTeam.keySet()) {
                 currentRowValues.add(PartialPlay.getPartialPlayPercentage(player));
                 // indicates the player is on the team
                 totalPreviousPlayers++;
             }
 
             ITeam nextTeam = teamAssignmentsList.get(i + 1);
-            for(IPlayer nextTeamPlayer : nextTeam.keySet())
-            {
+            for(IPlayer nextTeamPlayer : nextTeam.keySet()) {
                 // Add a -1 * playing time to represent the difference
                 currentRowValues.add(-1 * PartialPlay.getPartialPlayPercentage(nextTeamPlayer));
             }

@@ -2,9 +2,6 @@ package jskills;
 
 public class PartialPlay {
 
-    /** Static only **/
-    private PartialPlay() { }
-
     public static double getPartialPlayPercentage(Object player) {
         // If the player doesn't support the interface, assume 1.0 == 100%
         if (player instanceof ISupportPartialPlay) {

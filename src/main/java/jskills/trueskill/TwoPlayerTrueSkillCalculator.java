@@ -1,23 +1,11 @@
 package jskills.trueskill;
 
-import static jskills.numerics.MathUtils.square;
-
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import jskills.GameInfo;
-import jskills.Guard;
-import jskills.IPlayer;
-import jskills.ITeam;
-import jskills.PairwiseComparison;
-import jskills.RankSorter;
+import jskills.*;
 import jskills.numerics.Range;
-import jskills.Rating;
-import jskills.SkillCalculator;
+
+import java.util.*;
+
+import static jskills.numerics.MathUtils.square;
 
 /**
  * Calculates the new ratings for only two players.
@@ -28,14 +16,12 @@ import jskills.SkillCalculator;
  */
 public class TwoPlayerTrueSkillCalculator extends SkillCalculator
 {
-    public TwoPlayerTrueSkillCalculator()
-    {
+    public TwoPlayerTrueSkillCalculator() {
         super(EnumSet.noneOf(SupportedOptions.class), Range.<ITeam>exactly(2), Range.<IPlayer>exactly(1));
     }
 
     @Override
-    public Map<IPlayer, Rating> calculateNewRatings(GameInfo gameInfo, Collection<ITeam> teams, int... teamRanks)
-    {
+    public Map<IPlayer, Rating> calculateNewRatings(GameInfo gameInfo, Collection<ITeam> teams, int... teamRanks) {
         // Basic argument checking
         Guard.argumentNotNull(gameInfo, "gameInfo");
         validateTeamCountAndPlayersCountPerTeam(teams);
@@ -55,18 +41,18 @@ public class TwoPlayerTrueSkillCalculator extends SkillCalculator
         boolean wasDraw = (teamRanks[0] == teamRanks[1]);
 
         Map<IPlayer, Rating> results = new HashMap<IPlayer, Rating>();
-        results.put(winner, CalculateNewRating(gameInfo, winnerPreviousRating, loserPreviousRating,
-                                             wasDraw ? PairwiseComparison.DRAW : PairwiseComparison.WIN));
-        results.put(loser, CalculateNewRating(gameInfo, loserPreviousRating, winnerPreviousRating,
-                                            wasDraw ? PairwiseComparison.DRAW : PairwiseComparison.LOSE));
+        results.put(winner, calculateNewRating(gameInfo, winnerPreviousRating, loserPreviousRating,
+                wasDraw ? PairwiseComparison.DRAW : PairwiseComparison.WIN));
+        results.put(loser, calculateNewRating(gameInfo, loserPreviousRating, winnerPreviousRating,
+                wasDraw ? PairwiseComparison.DRAW : PairwiseComparison.LOSE));
 
         // And we're done!
         return results;
     }
 
-    private static Rating CalculateNewRating(GameInfo gameInfo, Rating selfRating, Rating opponentRating,
-                                             PairwiseComparison comparison)
-    {
+    private static Rating calculateNewRating(GameInfo gameInfo, Rating selfRating,
+                                             Rating opponentRating, PairwiseComparison comparison) {
+
         double drawMargin = DrawMargin.GetDrawMarginFromDrawProbability(gameInfo.getDrawProbability(), gameInfo.getBeta());
 
         double c =
@@ -80,8 +66,7 @@ public class TwoPlayerTrueSkillCalculator extends SkillCalculator
         double winningMean = selfRating.getMean();
         double losingMean = opponentRating.getMean();
 
-        switch (comparison)
-        {
+        switch (comparison) {
             case WIN: case DRAW: /* NOP */ break;
             case LOSE:
                 winningMean = opponentRating.getMean();
@@ -95,17 +80,14 @@ public class TwoPlayerTrueSkillCalculator extends SkillCalculator
         double w;
         double rankMultiplier;
 
-        if (comparison != PairwiseComparison.DRAW)
-        {
+        if (comparison != PairwiseComparison.DRAW) {
             // non-draw case
-            v = TruncatedGaussianCorrectionFunctions.VExceedsMargin(meanDelta, drawMargin, c);
-            w = TruncatedGaussianCorrectionFunctions.WExceedsMargin(meanDelta, drawMargin, c);
+            v = TruncatedGaussianCorrectionFunctions.vExceedsMargin(meanDelta, drawMargin, c);
+            w = TruncatedGaussianCorrectionFunctions.wExceedsMargin(meanDelta, drawMargin, c);
             rankMultiplier = comparison.multiplier;
-        }
-        else
-        {
-            v = TruncatedGaussianCorrectionFunctions.VWithinMargin(meanDelta, drawMargin, c);
-            w = TruncatedGaussianCorrectionFunctions.WWithinMargin(meanDelta, drawMargin, c);
+        } else {
+            v = TruncatedGaussianCorrectionFunctions.vWithinMargin(meanDelta, drawMargin, c);
+            w = TruncatedGaussianCorrectionFunctions.wWithinMargin(meanDelta, drawMargin, c);
             rankMultiplier = 1;
         }
 
@@ -121,8 +103,7 @@ public class TwoPlayerTrueSkillCalculator extends SkillCalculator
     }
 
     @Override
-    public double calculateMatchQuality(GameInfo gameInfo, Collection<ITeam> teams)
-    {
+    public double calculateMatchQuality(GameInfo gameInfo, Collection<ITeam> teams) {
         Guard.argumentNotNull(gameInfo, "gameInfo");
         validateTeamCountAndPlayersCountPerTeam(teams);
 

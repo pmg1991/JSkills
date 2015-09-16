@@ -1,12 +1,8 @@
 package jskills.factorgraphs;
 
-import static jskills.Guard.argumentIsValidIndex;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static jskills.Guard.argumentIsValidIndex;
 
 public abstract class Factor<TValue> {
 
@@ -54,19 +50,19 @@ public abstract class Factor<TValue> {
      * Sends the ith message to the marginal and returns the log-normalization
      * constant
      **/
-    public double SendMessage(int messageIndex) {
+    public double sendMessage(int messageIndex) {
         argumentIsValidIndex(messageIndex, messages.size(), "messageIndex");
 
         Message<TValue> message = messages.get(messageIndex);
         Variable<TValue> variable = messageToVariableBinding.get(message);
-        return SendMessage(message, variable);
+        return sendMessage(message, variable);
     }
 
-    protected abstract double SendMessage(Message<TValue> message, Variable<TValue> variable);
+    protected abstract double sendMessage(Message<TValue> message, Variable<TValue> variable);
 
-    public abstract Message<TValue> CreateVariableToMessageBinding(Variable<TValue> variable);
+    public abstract Message<TValue> createVariableToMessageBinding(Variable<TValue> variable);
 
-    protected Message<TValue> CreateVariableToMessageBinding(Variable<TValue> variable, Message<TValue> message) {
+    protected Message<TValue> createVariableToMessageBinding(Variable<TValue> variable, Message<TValue> message) {
         messages.add(message);
         messageToVariableBinding.put(message, variable);
         variables.add(variable);

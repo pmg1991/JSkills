@@ -5,13 +5,13 @@ package jskills;
  */
 public class Player<T> implements IPlayer, ISupportPartialPlay, ISupportPartialUpdate {
 
-    /** = 100% play time **/
+    // = 100% play time
     private static final double DefaultPartialPlayPercentage = 1.0;
 
-    /** = receive 100% update **/
+    // = receive 100% update
     private static final double DefaultPartialUpdatePercentage = 1.0;
 
-    /** The identifier for the player, such as a name. **/
+    // The identifier for the player, such as a name.
     private final T id;
 
     /**
@@ -30,8 +30,7 @@ public class Player<T> implements IPlayer, ISupportPartialPlay, ISupportPartialU
     /**
      * Constructs a player.
      * 
-     * @param id
-     *            The identifier for the player, such as a name.
+     * @param id The identifier for the player, such as a name.
      */
     public Player(T id) {
         this(id, DefaultPartialPlayPercentage, DefaultPartialUpdatePercentage);
@@ -40,11 +39,8 @@ public class Player<T> implements IPlayer, ISupportPartialPlay, ISupportPartialU
     /**
      * Constructs a player.
      * 
-     * @param id
-     *            The identifier for the player, such as a name.
-     * @param partialPlayPercentage
-     *            The weight percentage to give this player when calculating a
-     *            new rank.
+     * @param id The identifier for the player, such as a name.
+     * @param partialPlayPercentage The weight percentage to give this player when calculating a new rank.
      */
     public Player(T id, double partialPlayPercentage) {
         this(id, partialPlayPercentage, DefaultPartialUpdatePercentage);
@@ -53,23 +49,15 @@ public class Player<T> implements IPlayer, ISupportPartialPlay, ISupportPartialU
     /**
      * Constructs a player.
      * 
-     * @param id
-     *            The identifier for the player, such as a name.
-     * @param partialPlayPercentage
-     *            The weight percentage to give this player when calculating a
-     *            new rank.
-     * @param partialUpdatePercentage
-     *            Indicates how much of a skill update a player should receive
-     *            where 0 represents no update and 1.0 represents 100% of the
-     *            update.
+     * @param id The identifier for the player, such as a name.
+     * @param partialPlayPercentage The weight percentage to give this player when calculating a new rank.
+     * @param partialUpdatePercentage Indicates how much of a skill update a player should receive
+     *                                where 0 represents no update and 1.0 represents 100% of the update.
      */
-    public Player(T id, double partialPlayPercentage,
-            double partialUpdatePercentage) {
+    public Player(T id, double partialPlayPercentage, double partialUpdatePercentage) {
         // If they don't want to give a player an id, that's ok...
-        Guard.argumentInRangeInclusive(partialPlayPercentage, 0, 1.0,
-                "partialPlayPercentage");
-        Guard.argumentInRangeInclusive(partialUpdatePercentage, 0, 1.0,
-                "partialUpdatePercentage");
+        Guard.argumentInRangeInclusive(partialPlayPercentage, 0, 1.0, "partialPlayPercentage");
+        Guard.argumentInRangeInclusive(partialUpdatePercentage, 0, 1.0, "partialUpdatePercentage");
         this.id = id;
         this.partialPlayPercentage = partialPlayPercentage;
         this.partialUpdatePercentage = partialUpdatePercentage;
@@ -79,12 +67,10 @@ public class Player<T> implements IPlayer, ISupportPartialPlay, ISupportPartialU
         return id;
     }
 
-    @Override
     public double getPartialPlayPercentage() {
         return partialPlayPercentage;
     }
 
-    @Override
     public double getPartialUpdatePercentage() {
         return partialUpdatePercentage;
     }

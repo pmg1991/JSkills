@@ -14,8 +14,6 @@ import java.util.Map;
  */
 public class RankSorter {
 
-    /** Static usage only **/ private RankSorter() { }
-
     /**
      * Returns a list of all the elements in items, sorted in non-descending
      * order, according to itemRanks. Uses a stable sort, and also sorts
@@ -57,7 +55,6 @@ public class RankSorter {
             itemToRank.put(itemsInList.get(i), itemRanks[i]);
         
         Collections.sort(itemsInList, new Comparator<T>() {
-            @Override
             public int compare(T o1, T o2) {
                 return itemToRank.get(o1).compareTo(itemToRank.get(o2));
             }

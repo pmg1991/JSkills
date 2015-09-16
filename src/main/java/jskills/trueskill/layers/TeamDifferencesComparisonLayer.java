@@ -11,31 +11,28 @@ import jskills.trueskill.factors.GaussianGreaterThanFactor;
 import jskills.trueskill.factors.GaussianWithinFactor;
 
 public class TeamDifferencesComparisonLayer extends
-    TrueSkillFactorGraphLayer<Variable<GaussianDistribution>, GaussianFactor, DefaultVariable<GaussianDistribution>>
-{
-    private final double _Epsilon;
-    private final int[] _TeamRanks;
+    TrueSkillFactorGraphLayer<Variable<GaussianDistribution>, GaussianFactor, DefaultVariable<GaussianDistribution>> {
 
-    public TeamDifferencesComparisonLayer(TrueSkillFactorGraph parentGraph, int[] teamRanks)
-    {
+    private final double epsilon;
+    private final int[] teamRanks;
+
+    public TeamDifferencesComparisonLayer(TrueSkillFactorGraph parentGraph, int[] teamRanks) {
         super(parentGraph);
-        _TeamRanks = teamRanks;
-        GameInfo gameInfo = parentFactorGraph.getGameInfo();
-        _Epsilon = DrawMargin.GetDrawMarginFromDrawProbability(gameInfo.getDrawProbability(), gameInfo.getBeta());
+        this.teamRanks = teamRanks;
+        final GameInfo gameInfo = parentFactorGraph.getGameInfo();
+        epsilon = DrawMargin.GetDrawMarginFromDrawProbability(gameInfo.getDrawProbability(), gameInfo.getBeta());
     }
 
     @Override
-    public void buildLayer()
-    {
-        for (int i = 0; i < getInputVariablesGroups().size(); i++)
-        {
-            boolean isDraw = (_TeamRanks[i] == _TeamRanks[i + 1]);
+    public void buildLayer() {
+        for (int i = 0; i < getInputVariablesGroups().size(); i++) {
+            boolean isDraw = (teamRanks[i] == teamRanks[i + 1]);
             Variable<GaussianDistribution> teamDifference = getInputVariablesGroups().get(i).get(0);
 
             GaussianFactor factor =
                 isDraw
-                    ? (GaussianFactor) new GaussianWithinFactor(_Epsilon, teamDifference)
-                    : new GaussianGreaterThanFactor(_Epsilon, teamDifference);
+                    ? (GaussianFactor) new GaussianWithinFactor(epsilon, teamDifference)
+                    : new GaussianGreaterThanFactor(epsilon, teamDifference);
 
             AddLayerFactor(factor);
         }

@@ -17,7 +17,7 @@ public class FactorList<TValue> {
         double sumLogZ = 0.0;
         for(Factor<TValue> f : factors) {
             for (int j = 0; j < f.getNumberOfMessages(); j++)
-                sumLogZ += f.SendMessage(j);
+                sumLogZ += f.sendMessage(j);
         }
         
         double sumLogS = 0;

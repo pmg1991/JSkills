@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public abstract class SkillCalculator {
     
-    public enum SupportedOptions { PartialPlay, PartialUpdate; }
+    public enum SupportedOptions { PartialPlay, PartialUpdate }
 
     private final EnumSet<SupportedOptions> supportedOptions;
     private final Range<IPlayer> playersPerTeamAllowed;
@@ -32,13 +32,9 @@ public abstract class SkillCalculator {
     /**
      * Calculates new ratings based on the prior ratings and team ranks.
      * 
-     * @param gameInfo
-     *            Parameters for the game.
-     * @param teams
-     *            A mapping of team players and their ratings.
-     * @param teamRanks
-     *            The ranks of the teams where 1 is first place. For a tie,
-     *            repeat the number (e.g. 1, 2, 2)
+     * @param gameInfo Parameters for the game.
+     * @param teams A mapping of team players and their ratings.
+     * @param teamRanks The ranks of the teams where 1 is first place. For a tie, repeat the number (e.g. 1, 2, 2)
      * @return All the players and their new ratings.
      */
     public abstract Map<IPlayer, Rating> calculateNewRatings(GameInfo gameInfo,
@@ -47,25 +43,19 @@ public abstract class SkillCalculator {
     /**
      * Calculates the match quality as the likelihood of all teams drawing.
      * 
-     * @param gameInfo
-     *            Parameters for the game.
-     * @param teams
-     *            A mapping of team players and their ratings.
-     * @return The quality of the match between the teams as a percentage (0% =
-     *          bad, 100% = well matched).
+     * @param gameInfo Parameters for the game.
+     * @param teams A mapping of team players and their ratings.
+     * @return The quality of the match between the teams as a percentage (0% = bad, 100% = well matched).
      */
-    public abstract double calculateMatchQuality(GameInfo gameInfo,
-            Collection<ITeam> teams);
+    public abstract double calculateMatchQuality(GameInfo gameInfo, Collection<ITeam> teams);
 
-    protected void validateTeamCountAndPlayersCountPerTeam(
-            Collection<ITeam> teams) {
+    protected void validateTeamCountAndPlayersCountPerTeam(Collection<ITeam> teams) {
         validateTeamCountAndPlayersCountPerTeam(teams, totalTeamsAllowed, playersPerTeamAllowed);
     }
 
-    private static void validateTeamCountAndPlayersCountPerTeam(
-            Collection<ITeam> teams, 
-            Range<ITeam> totalTeams,
-            Range<IPlayer> playersPerTeam) {
+    private static void validateTeamCountAndPlayersCountPerTeam(Collection<ITeam> teams,
+                                                                Range<ITeam> totalTeams,
+                                                                Range<IPlayer> playersPerTeam) {
         Guard.argumentNotNull(teams, "teams");
         int countOfTeams = 0;
         for (ITeam currentTeam : teams) {
