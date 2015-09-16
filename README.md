@@ -12,10 +12,15 @@ Install this package to your local Maven repository
 
 and define the dependency in your project as following
 
+```XML
+<dependency>
+    <groupId>jskills</groupId>
+    <artifactId>jskills</artifactId>
+    <version>0.9.1-SNAPSHOT</version>
+</dependency>
+```
 
-    <dependency>
-        <groupId>jskills</groupId>
-        <artifactId>jskills</artifactId>
-        <version>0.1-SNAPSHOT</version>
-    </dependency>
+License
+-------
 
+See `LICENSE.txt` in the project root.
