@@ -1,4 +1,6 @@
-bin
-deploy
-deploy/*
-test-output
+# IntelliJ project meta data
+.idea
+*.iml
+
+# Maven
+target
