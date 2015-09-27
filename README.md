@@ -8,7 +8,7 @@ Usage
 
 Install this package to your local Maven repository
 
-    maven install
+    mvn install
 
 and define the dependency in your project as following
 
