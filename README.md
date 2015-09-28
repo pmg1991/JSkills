@@ -1,5 +1,6 @@
 JSkills
 =======
+[![Build Status](https://travis-ci.org/nsp/JSkills.svg?branch=master)](https://travis-ci.org/nsp/JSkills)
 
 A detailed implementation of the TrueSkill algorithm in Java.
 
